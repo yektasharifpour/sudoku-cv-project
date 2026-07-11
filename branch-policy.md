@@ -21,23 +21,18 @@
 
 Create short-lived branches from `develop` using one of these prefixes:
 
-- `feature/<name>`
-- `bugfix/<name>`
-- `hotfix/<name>`
-- `refactor/<name>`
-- `docs/<name>`
-- `test/<name>`
-- `chore/<name>`
+- `phasex/feature/<name>`
+- `phasex/bugfix/<name>`
+- `phasex/refactor/<name>`
+- `phasex/docs/<name>`
 
 Examples:
 
 ```text
-feature/player-movement
-feature/enemy-ai
-bugfix/camera-jitter
-hotfix/crash-on-start
-refactor/render-loop
-docs/setup-guide
+phase1/feature/grid-extraction
+phase1/refactor/grid-extraction
+phase1/bugFix/render-loop
+phase1/docs/...
 
 ```
 
