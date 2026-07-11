@@ -22,6 +22,7 @@
 Create short-lived branches from `develop` using one of these prefixes:
 
 - `phasex/feature/<name>`
+- `phasex/documents/phasex_doc`
 - `phasex/bugfix/<name>`
 - `phasex/refactor/<name>`
 - `phasex/docs/<name>`
