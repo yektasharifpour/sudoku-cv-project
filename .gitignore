@@ -1,11 +1,3 @@
-# Datasets (large, not committed as raw files)
-datasets/*
-!datasets/.gitkeep
-
-# Checkpoints (intermediate artifacts — see README Checkpoint Policy)
-checkpoints/*
-!checkpoints/.gitkeep
-
 # Model weights tracked via Git LFS instead of plain git blobs where large
 # (see .gitattributes once added)
 
