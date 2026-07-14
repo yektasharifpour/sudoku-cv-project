@@ -1,0 +1,195 @@
+"""
+Phase 1 — Sudoku Grid Extraction
+
+Refactored from notebooks/phase1_grid_extraction.ipynb (Block 1.8, the
+notebook's final consolidated pipeline). Detects a Sudoku grid in a photo,
+warps it to a flat square, splits it into 81 cells, and flags empty cells.
+
+Usage:
+    python grid_extraction.py
+    (runs the same 20-image batch test as the notebook's Block 1.8)
+
+Or import and use directly:
+    from grid_extraction import process_sudoku_image
+    result = process_sudoku_image("path/to/image.jpg")
+"""
+
+import glob
+import os
+import matplotlib.pyplot as plt
+import cv2
+import numpy as np
+
+
+def order_corners(pts):
+    """Order 4 detected corner points as top-left, top-right, bottom-right, bottom-left."""
+    pts = pts.reshape(4, 2)
+    ordered = np.zeros((4, 2), dtype="float32")
+
+    s = pts.sum(axis=1)
+    ordered[0] = pts[np.argmin(s)]   # top-left: smallest x+y
+    ordered[2] = pts[np.argmax(s)]   # bottom-right: largest x+y
+
+    diff = np.diff(pts, axis=1)
+    ordered[1] = pts[np.argmin(diff)]  # top-right: smallest y-x
+    ordered[3] = pts[np.argmax(diff)]  # bottom-left: largest y-x
+
+    return ordered
+
+
+def process_sudoku_image(image_path, epsilon_values=(0.02, 0.04, 0.05, 0.06)):
+    """
+    Full Phase 1 pipeline for a single image: grayscale -> threshold ->
+    grid contour detection -> perspective warp -> 81-cell split ->
+    empty-cell detection -> checkpoint save.
+
+    Returns a dict describing pass/fail status and results.
+    """
+    image = cv2.imread(image_path)
+    if image is None:
+        return {"path": image_path, "status": "failed", "reason": "could not read image"}
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    thresh = cv2.adaptiveThreshold(
+        blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY_INV, 11, 2
+    )
+
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return {"path": image_path, "status": "failed", "reason": "no contours found"}
+    largest_contour = max(contours, key=cv2.contourArea)
+    perimeter = cv2.arcLength(largest_contour, True)
+
+    approx = None
+    for eps in epsilon_values:
+        candidate = cv2.approxPolyDP(largest_contour, eps * perimeter, True)
+        if len(candidate) == 4:
+            approx = candidate
+            break
+
+    if approx is None:
+        return {"path": image_path, "status": "failed", "reason": "could not find 4 corners"}
+
+    corners = order_corners(approx)
+    side = 900
+    dst = np.array([[0, 0], [side - 1, 0], [side - 1, side - 1], [0, side - 1]], dtype="float32")
+    transform_matrix = cv2.getPerspectiveTransform(corners, dst)
+    warped_thresh = cv2.warpPerspective(thresh, transform_matrix, (side, side))
+    
+
+
+
+
+
+    cell_size = side // 9
+    cells_thresh = []
+    for row in range(9):
+        for col in range(9):
+            y1, y2 = row * cell_size, (row + 1) * cell_size
+            x1, x2 = col * cell_size, (col + 1) * cell_size
+            cells_thresh.append(warped_thresh[y1:y2, x1:x2])
+        '''
+    just for showing the images in png files
+    '''
+    # Draw detected contour on original image
+    contour_image = image.copy()
+    cv2.drawContours(contour_image, [approx], -1, (0, 255, 0), 3)
+
+    # Create a figure showing all processing stages
+    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+
+    axes[0, 0].imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    axes[0, 0].set_title("Original")
+    axes[0, 0].axis("off")
+
+    axes[0, 1].imshow(gray, cmap="gray")
+    axes[0, 1].set_title("Gray")
+    axes[0, 1].axis("off")
+
+    axes[0, 2].imshow(thresh, cmap="gray")
+    axes[0, 2].set_title("Threshold")
+    axes[0, 2].axis("off")
+
+    axes[1, 0].imshow(cv2.cvtColor(contour_image, cv2.COLOR_BGR2RGB))
+    axes[1, 0].set_title("Detected Grid")
+    axes[1, 0].axis("off")
+
+    axes[1, 1].imshow(warped_thresh, cmap="gray")
+    axes[1, 1].set_title("Warped Sudoku")
+    axes[1, 1].axis("off")
+
+    # Build a 9×9 preview of all cells
+    preview = np.zeros((900, 900), dtype=np.uint8)
+
+    for i, cell in enumerate(cells_thresh):
+        r = i // 9
+        c = i % 9
+        preview[
+            r*100:(r+1)*100,
+            c*100:(c+1)*100
+        ] = cv2.resize(cell, (100, 100))
+
+    axes[1, 2].imshow(preview, cmap="gray")
+    axes[1, 2].set_title("81 Cells")
+    axes[1, 2].axis("off")
+
+    plt.tight_layout()
+
+    os.makedirs("outputs", exist_ok=True)
+    plt.savefig(
+        f"outputs/{os.path.splitext(os.path.basename(image_path))[0]}_pipeline.png",
+        dpi=200,
+        bbox_inches="tight"
+    )
+    plt.close()
+
+
+
+    
+    def clean_cell(cell, margin_ratio=0.18):
+        h, w = cell.shape
+        m = int(h * margin_ratio)
+        return cell[m:h - m, m:w - m]
+
+    def is_empty(binary_cell, white_pixel_threshold=0.03):
+        white_ratio = np.sum(binary_cell == 255) / binary_cell.size
+        return white_ratio < white_pixel_threshold
+
+    cleaned_cells = [clean_cell(c) for c in cells_thresh]
+    empty_flags = [is_empty(c) for c in cleaned_cells]
+
+    checkpoint_name = os.path.splitext(os.path.basename(image_path))[0]
+    save_path = f"checkpoints/phase1/{checkpoint_name}.npz"
+    os.makedirs("checkpoints/phase1", exist_ok=True)
+    np.savez(save_path, cells=np.array(cleaned_cells, dtype=object),
+             empty_flags=np.array(empty_flags), transform_matrix=transform_matrix, corners=corners)
+
+    return {
+        "path": image_path,
+        "status": "passed",
+        "checkpoint": save_path,
+        "empty_count": int(np.sum(empty_flags)),
+    }
+
+
+def run_batch_test(dataset_glob="datasets/sudoku_dataset/images/*.jpg", limit=20):
+    """Reproduces the notebook's Block 1.8 batch test and printed summary."""
+    test_images = glob.glob(dataset_glob)[:limit]
+
+    results = [process_sudoku_image(p) for p in test_images]
+
+    passed = [r for r in results if r["status"] == "passed"]
+    failed = [r for r in results if r["status"] == "failed"]
+
+    print(f"Passed: {len(passed)} / {len(results)}")
+    print(f"Failed: {len(failed)}")
+    for r in failed:
+        print(" -", r["path"], "\u2192", r["reason"])
+
+    return results
+
+
+if __name__ == "__main__":
+    run_batch_test()
