@@ -92,6 +92,12 @@ Purpose: train the CNN on the combined dataset using CrossEntropy Loss, tracking
 Purpose: visualize loss and accuracy over epochs, per spec deliverable requirement.
 ### Output:
 ![[b2.8-output.png|697]]
+
+### v10 Model (final — domain-matched training on real Sudoku cells)
+The above curve is from the v1 Colab run. The final v10 model was trained locally on CUDA with `DigitClassifierV2` (3 conv + BatchNorm). Accuracy curve over 17 epochs (early stopping):
+
+![[v10_training_curve.png]]
+
 ## Block 2.9 — Confusion Matrix & Error Analysis
 ### Output:
 Purpose: evaluate per-class performance, especially checking if the "empty" class (0) is confused with digits, per spec deliverable requirement.
@@ -112,6 +118,32 @@ Purpose: evaluate per-class performance, especially checking if the "empty" clas
     accuracy                          0.99     29387
    `macro avg       0.99      0.99       0.99     29387`
 `weighted avg       0.99      0.99      0.99     29387`
+
+## Block 2.10 — Misclassification Examples
+### v10 Model (final — real Sudoku photo cells)
+The above report is from the v1 Colab run on clean MNIST+Hoda data. The final v10 model was evaluated on 3,321 held-out real Sudoku photo cells (41 test images). Confusion matrix (row-normalized proportions; diagonal annotated with absolute counts):
+
+![[v10_confusion_matrix.png]]
+
+`Test accuracy: 0.9506`
+Raw counts (rows = true label, cols = predicted):
+
+```
+         0    1    2    3    4    5    6    7    8    9
+true 0: 2106    8    2    3    3    2    2    2    2    2
+true 1:   16  117    0    0    0    0    0    3    1    0
+true 2:   11    0  120    0    0    0    1    0    0    0
+true 3:   14    0    1  117    0    0    0    0    0    0
+true 4:   11    0    1    0  118    0    0    1    1    0
+true 5:   14    0    0    0    0  109    0    0    0    0
+true 6:   17    0    0    0    0    0  101    0    0    0
+true 7:   14    2    0    0    0    0    0  125    1    0
+true 8:   16    0    1    0    0    1    0    0  134    1
+true 9:    9    0    0    0    0    1    0    0    0  110
+```
+
+> [!note] Dominant error mode
+> The majority of v10 errors are **digits predicted as empty (class 0)** — caused by thin/faint strokes in real photos being lost during thresholding. Digit-to-digit confusion is rare (7↔1, 8↔9). See [[Error Analysis]] for the full breakdown.
 
 ## Block 2.10 — Misclassification Examples
 Purpose: visually inspect actual misclassified samples for the error-analysis deliverable.
