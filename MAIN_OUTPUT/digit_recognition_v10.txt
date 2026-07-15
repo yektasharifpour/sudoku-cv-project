@@ -1,0 +1,97 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+Loading personal and system profiles took 1944ms.
+(base) (.venv) PS E:\Good Projects\sudoku-cv-project> python src/phase1_pipeline.py --images datasets/sudoku_dataset/training --checkpoint-dir checkpoints/phase1/train --limit 0
+Passed: 119 / 119                                                              
+Failed: 0
+Images with ground-truth .dat labels found: 119 / 119
+(base) (.venv) PS E:\Good Projects\sudoku-cv-project> python src/phase1_pipeline.py --images datasets/sudoku_dataset/testing --checkpoint-dir checkpoints/phase1/test --limit 0  
+Passed: 38 / 38
+Failed: 0
+Images with ground-truth .dat labels found: 38 / 38
+(base) (.venv) PS E:\Good Projects\sudoku-cv-project> python -W ignore src/phase2_digit_recognition.py                                                                           
+======================================================================
+Loading real labeled cells from Phase 1 checkpoints (TRAIN fold)...
+  165/165 training images had .dat ground truth
+  Real labeled cells collected: 13365
+    class 0: 8562
+    class 1: 514
+    class 2: 527
+    class 3: 552
+    class 4: 526
+    class 5: 532
+    class 6: 473
+    class 7: 540
+    class 8: 585
+    class 9: 554
+
+Loading real labeled cells from Phase 1 checkpoints (TEST fold)...
+  41/41 test images had .dat ground truth
+  Real labeled test cells collected: 3321
+
+Loading MNIST...
+Re-photographing MNIST digits through the real threshold+crop pipeline...
+Generating domain-matched printed font digits...
+Found 442 font file(s) for synthetic printed digits.
+
+Generating 4286 domain-matched synthetic empty cells to balance against the average digit class (~12848)...
+
+Splitting train/validation (stratified per class, grouped by font so no font's samples appear on both sides, val fraction = 0.15)...
+
+Final train: (109204, 28, 28)  Final val: (19280, 28, 28)
+Class distribution (train):
+  class 0: 10921
+  class 1: 11641
+  class 2: 10898
+  class 3: 11048
+  class 4: 10745
+  class 5: 10327
+  class 6: 10756
+  class 7: 11167
+  class 8: 10807
+  class 9: 10894
+
+Using device: cuda
+
+Checkpoint mismatch. Starting fresh.
+Epoch 1/30 | Train acc: 0.8652 | Val acc: 0.9233
+Epoch 2/30 | Train acc: 0.9322 | Val acc: 0.9335
+Epoch 3/30 | Train acc: 0.9426 | Val acc: 0.9345
+Epoch 4/30 | Train acc: 0.9480 | Val acc: 0.9412
+Epoch 5/30 | Train acc: 0.9513 | Val acc: 0.9478
+Epoch 6/30 | Train acc: 0.9543 | Val acc: 0.9413
+Epoch 7/30 | Train acc: 0.9568 | Val acc: 0.9497
+Epoch 8/30 | Train acc: 0.9578 | Val acc: 0.9499
+Epoch 9/30 | Train acc: 0.9594 | Val acc: 0.9452
+Epoch 10/30 | Train acc: 0.9600 | Val acc: 0.9487
+Epoch 11/30 | Train acc: 0.9612 | Val acc: 0.9516
+Epoch 12/30 | Train acc: 0.9619 | Val acc: 0.9536
+Epoch 13/30 | Train acc: 0.9634 | Val acc: 0.9504
+Epoch 14/30 | Train acc: 0.9636 | Val acc: 0.9504
+Epoch 15/30 | Train acc: 0.9642 | Val acc: 0.9491
+Epoch 16/30 | Train acc: 0.9651 | Val acc: 0.9468
+Epoch 17/30 | Train acc: 0.9652 | Val acc: 0.9501
+Early stopping triggered (validation accuracy plateaued).
+
+======================================================================
+FINAL EVALUATION on real, held-out Sanitized Sudoku photo cells (v2_test):
+Test accuracy: 0.9506
+
+Confusion matrix (rows = true label, cols = predicted):
+         0    1    2    3    4    5    6    7    8    9
+true 0: 2106    8    2    3    3    2    2    2    2    2
+true 1:   16  117    0    0    0    0    0    3    1    0
+true 2:   11    0  120    0    0    0    1    0    0    0
+true 3:   14    0    1  117    0    0    0    0    0    0
+true 4:   11    0    1    0  118    0    0    1    1    0
+true 5:   14    0    0    0    0  109    0    0    0    0
+true 6:   17    0    0    0    0    0  101    0    0    0
+true 7:   14    2    0    0    0    0    0  125    1    0
+true 8:   16    0    1    0    0    1    0    0  134    1
+true 9:    9    0    0    0    0    1    0    0    0  110
+
+Saved models/digit_classifier_final_v10.pt
+(base) (.venv) PS E:\Good Projects\sudoku-cv-project> 
