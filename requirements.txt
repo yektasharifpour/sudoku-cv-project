@@ -1,22 +1,45 @@
-# Core CV / numerics
+# ============================================================
+# Core Computer Vision
+# ============================================================
+
 opencv-python
 numpy
+Pillow
 
-# Digit recognition model (choose one deep learning backend — TBD Phase 2)
+# ============================================================
+# Deep Learning (PyTorch)
+# ============================================================
+
 torch
 torchvision
-# tensorflow          # uncomment if using TF/Keras instead of PyTorch
 
-# Evaluation / plotting
-matplotlib
+# ============================================================
+# Data Processing
+# ============================================================
+
+pandas
+tqdm
+
+# ============================================================
+# Machine Learning / Evaluation
+# ============================================================
+
 scikit-learn
+matplotlib
 
-# Sudoku solver — pure Python, no extra deps expected
+# ============================================================
+# Sudoku Solver
+# ============================================================
+# Pure Python (no external dependencies)
 
-# UI (Bonus #3) — uncomment once toolkit is chosen in Phase 5
-# streamlit
-# gradio
-# pyqt6
+# ============================================================
+# User Interface
+# ============================================================
 
+streamlit
+
+# ============================================================
 # Testing
+# ============================================================
+
 pytest
