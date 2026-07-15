@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Phase2/Error Analysis.md",
+                "file": "Phase2/Training progress.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Error Analysis"
+              "title": "Training progress"
             }
           }
         ],
@@ -200,10 +200,13 @@
   },
   "active": "8fc79d8d5b4c16ad",
   "lastOpenFiles": [
-    "Phase2/Training progress.md",
+    "Phase3/Sudoku Solver.md",
+    "Phase4/Final Project Report.md",
+    "Phase4/Performance Analysis.md",
     "Phase2/Training Curve.md",
-    "Phase2/Error Analysis.md",
     "Phase2/Evaluation Results.md",
+    "Phase2/Error Analysis.md",
+    "Phase2/Training progress.md",
     "images/b2.8-output.png",
     "images/b2.10-output.png",
     "images/b2.9-output.png",

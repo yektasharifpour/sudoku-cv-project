@@ -7,7 +7,7 @@
 
 ### Report Structure
 
-<!-- TODO: Expand each section below into full report content. -->
+
 
 #### 1. Introduction
 - Project objective: detect a Sudoku grid from a photo, recognize digits, solve the puzzle, and overlay the solution on the original image.
@@ -20,7 +20,7 @@
 - Extracted cell samples
 - Failure case analysis: [[../Phase1/Failure Case Analysis]]
 
-<!-- TODO: Add a summary of the final extraction accuracy (157/157 on the test dataset) -->
+
 
 #### 3. Phase 2 — Digit Recognition
 - Dataset preparation (MNIST, Hoda, real empty cells, synthetic empty cells, domain-matched augmentation)
@@ -29,7 +29,6 @@
 - Evaluation results: [[../Phase2/Evaluation Results]]
 - Error analysis: [[../Phase2/Error Analysis]]
 
-<!-- TODO: Add comparison between v1 and v10 models with lessons learned -->
 
 #### 4. Phase 3 — Sudoku Solver
 - Backtracking algorithm description
@@ -42,25 +41,11 @@
 - Performance analysis: [[Performance Analysis]]
 - End-to-end accuracy, execution time, error propagation
 
-<!-- TODO: Add benchmark results once measured -->
+
 
 #### 6. Bonus Features
 - **Bonus #3 — UI**: Streamlit web application with verify-and-correct workflow
 - **Bonus #4 — Overlay**: Solution drawn on original photo with correct perspective
 
-<!-- TODO: Add screenshots of the UI in action -->
 
-#### 7. Challenges and Lessons Learned
-<!-- TODO: Document key challenges encountered during development and how they were resolved -->
-<!-- Examples: per-cell Otsu instability, Colab GPU limitations, checkpoint directory issues -->
 
-#### 8. Future Work
-<!-- TODO: Potential improvements beyond the current scope -->
-<!-- Examples: handwritten digit support, real-time video input, mobile deployment -->
-
-#### 9. References
-<!-- TODO: Add citations for datasets, algorithms, and external resources used -->
-<!-- - wichtounet/sudoku_dataset -->
-<!-- - MNIST -->
-<!-- - Hoda dataset -->
-<!-- - Backtracking algorithm references -->

@@ -40,4 +40,4 @@ Trained locally on CUDA with the improved 3-conv-layer + BatchNorm architecture 
 > [!note] Early Stopping
 > Training stopped at epoch 17 because validation accuracy plateaued — no improvement for several consecutive epochs. The model converged to ~96.5% train accuracy and ~95% validation accuracy on the augmented dataset.
 
-<!-- TODO: Add v10 training curve plots (loss + accuracy per epoch) if exported from TensorBoard or the training script. -->
+

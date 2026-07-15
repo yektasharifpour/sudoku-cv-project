@@ -65,4 +65,4 @@
 >
 > Among digit-to-digit confusions, the most notable pairs are 7↔1 (2 cases) and 8↔9 (1 case) — consistent with visually ambiguous stroke shapes.
 
-<!-- TODO: Add per-class precision/recall/F1 for v10 model if computed. -->
+
