@@ -67,5 +67,4 @@ This means roughly **1 in 5 puzzles** will have at least one digit misread — w
 2. **Domain-matched training**: MNIST digits are re-photographed through the real threshold+crop pipeline so the model trains on the same artifact patterns it will see at inference time.
 3. **User verification step**: The Streamlit UI flags low-confidence cells and provides an editable grid for manual correction before solving.
 
-<!-- TODO: Add specific examples of digit→empty misclassifications from v10 test set if available. -->
-<!-- TODO: Consider adding a per-image puzzle-level accuracy metric (how many of 157 test puzzles are solved correctly end-to-end without user correction). -->
+
