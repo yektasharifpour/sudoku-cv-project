@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Phase2/Training progress.md",
+                "file": "Phase2/Training Curve.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Training progress"
+              "title": "Training Curve"
             }
           }
         ],
@@ -200,8 +200,8 @@
   },
   "active": "8fc79d8d5b4c16ad",
   "lastOpenFiles": [
-    "Phase2/Training Curve.md",
     "Phase2/Training progress.md",
+    "Phase2/Training Curve.md",
     "Phase2/Evaluation Results.md",
     "Phase2/Error Analysis.md",
     "images/v10_confusion_matrix.png",
